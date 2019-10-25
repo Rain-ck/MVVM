@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2.2 条件与循环</title>
+    <script src="../../Vue.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        .container {
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+        }
+        .main {
+            height: 500px;
+            width: 500px;
+            border: red thin solid;
+        }
+        button {
+            width: 100%;
+            font-size: 15px;
+            font-family: 微軟正黑體, sans-serif;
+        }
+        .main > button {
+            width: 100%;
+            height: 50px;
+            background-color: cornflowerblue;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .main table{
+            width: 100%;
+
+        }
+        .main table td,th {
+            text-align: center;
+            border: darkgrey thin solid;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main" class="container">
+        <div class="main">
+            <button @click="addCount">添加</button>
+            <table>
+                <tr>
+                    <th>姓名</th>
+                    <th>审核状态</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(item, index) in items.slice(0, this.count)">
+                    <td>{{item.name}}</td>
+                    <td>{{computeStatus(item)}}</td>
+                    <td><button @click="computeClick(index)">{{computeOption(item)}}</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                items: [
+                    {name:'张三',status:0},
+                    {name:'李四',status:1},
+                    {name:'王五',status:-1},
+                    {name:'赵六',status:-1},
+                    {name:'孙七',status:-1},
+                ],
+                count: 0
+            },
+            computed: {
+                computeStatus: function(){
+                    return function(item){
+                        let statusStr ="";
+                        switch (item.status) {
+                            case 1: statusStr = "合格";
+                                break;
+                            case 0: statusStr = "不合格";
+                                break;
+                            case -1: statusStr = "待审核";
+                                break;
+                            default: statusStr = "";
+                                break;
+                        }
+                        return statusStr;
+                    }
+                },
+                computeOption: function(){
+                    return function (item) {
+                        let option = "";
+                        switch (item.status) {
+                            case 1:
+                            case 0:option = "删除";
+                                break;
+                            case -1: option = "审核";
+                                break;
+                            default:option = "";
+                                break;
+                        }
+                        return option;
+                    }
+                }
+            },
+            methods: {
+                computeClick: function(index){
+                        if(this.items[index].status === -1){
+                            this.items[index].status = 1;
+                        } else {
+                            this.items.splice(index,1);
+                            this.count--;
+                        }
+                },
+                addCount: function(){
+                    if(this.count < this.items.length){
+                        this.count++;
+                    }else {
+                        alert("no more item can add!");
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
