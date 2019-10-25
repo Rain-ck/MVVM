@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2.4</title>
+    <script src="../../Vue.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+            font-family: 微軟正黑體， sans-serif;
+            font-size: 20px;
+        }
+        .container {
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+        }
+        #main {
+            height: 500px;
+            width: 500px;
+            border: red thin solid;
+        }
+        input {
+            height: 20px;
+        }
+        button{
+            height:100%;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="main">
+            <div id="child">
+                <label for="input">子组件：</label>
+                <input id="input" type="text" v-model="message">
+                <button @click="buttonClick">通知父组件</button>
+            </div>
+            <div id="parent">
+                <label for="parent-text">我是父组件:</label>
+                <span id="parent-text" class="spanText">{{defaultMessage}}</span>
+            </div>
+            <div id="grandparent">
+                <label for="grandparent-text">我是更高层父组件:</label>
+                <span id="grandparent-text" class="spanText">{{defaultMessage}}</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#main',
+            data: {
+                message: "",
+                buttonClickFlag: false
+            },
+            computed: {
+              defaultMessage: function(){
+                  if(this.message !== "" && this.buttonClickFlag){
+                      return this.message;
+                  }else {
+                      return "静静等待用户输入";
+                  }
+              }
+            },
+            methods: {
+                buttonClick: function(){
+                    this.buttonClickFlag = true;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
